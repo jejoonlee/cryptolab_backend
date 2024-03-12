@@ -5,11 +5,11 @@ app_name = "account"
 
 urlpatterns = [
     # 회원가입
-    path("register", views.UserView.as_view()),
+    path("/register", views.UserView.as_view()),
 
     # 로그인
-    path('login', views.UserLogin.as_view()),
+    path('/login', views.UserLogin.as_view()),
     
     # 로그아웃
-    # path('logout', views.logout, name='logout')
+    # path('logout', views.UserLogout.as_view())
 ]
