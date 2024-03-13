@@ -1,6 +1,7 @@
 from .serializers import RegisterSerializer, LoginSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 # Create your views here.
 class UserView(generics.CreateAPIView):
@@ -33,7 +34,18 @@ class UserLogin(generics.CreateAPIView):
         if serializer.is_valid():
             user = serializer.login_now(request)
             if user:
-                return Response({"message": "로그인 성공"}, status=status.HTTP_200_OK)
+                token = TokenObtainPairSerializer.get_token(user)
+                refresh_token = str(token)
+                access_token = str(token.access_token)
+
+                return Response({
+                    "message": "로그인 성공",
+                    "jwt_token": {
+                        "access_token": access_token,
+                        "refresh_token": refresh_token
+                    },
+                    
+                    }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "유효하지 않은 자격 증명"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
